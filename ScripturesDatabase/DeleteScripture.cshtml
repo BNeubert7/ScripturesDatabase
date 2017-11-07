@@ -1,0 +1,91 @@
+﻿@{ 
+    Layout = "~/_Layout.cshtml";
+    Page.Title = "Delete a Scripture";
+
+    var Book = "";
+    var Chapter = "";
+    var Verse = "";
+    var Note = "";
+    var Date = "";
+    var ScriptureID = "";
+
+    if (!IsPost)
+    {
+        if(!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt()){
+            ScriptureID = Request.QueryString["ID"];
+            var db = Database.Open("Scriptures");
+            var dbCommand = "SELECT * FROM Scriptures WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, ScriptureID);
+            if (row != null)
+            {
+                Book = row.Book;
+                Chapter = Convert.ToString(row.Chapter);
+                Verse = Convert.ToString(row.Verse);
+                Note = row.Note;
+                Date = Convert.ToString(row["Date Added"]);
+            }
+            else
+            {
+                Validation.AddFormError("No scripture was found for that ID.");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No scripture was found for that ID.");
+        }
+    }
+
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+        ScriptureID = Request.Form["movieId"];
+        var db = Database.Open("Scriptures");
+        var deleteCommand = "DELETE FROM Scriptures WHERE ID = @0";
+        db.Execute(deleteCommand, ScriptureID);
+        Response.Redirect("~/Scriptures");
+    }
+}
+
+<html>
+<head>
+    <title>Delete a Scripture</title>
+</head>
+<body>
+    <h1>Delete a Scripture</h1>
+    @Html.ValidationSummary()
+    <p><a href="~/Movies">Return to Scriptures</a></p>
+
+    <form method="post">
+        <fieldset>
+            <legend>Scripture Information</legend>
+
+            <p>
+                <span>Book:</span>
+                <span>@Book</span>
+            </p>
+
+            <p>
+                <span>Chapter:</span>
+                <span>@Chapter</span>
+            </p>
+
+            <p>
+                <span>Verse:</span>
+                <span>@Verse</span>
+            </p>
+
+            <p>
+                <span>Note:</span>
+                <span>@Note</span>
+            </p>
+
+            <p>
+                <span>Date Added:</span>
+                <span>@Date</span>
+            </p>
+
+            <input type="hidden" name="movieid" value="@ScriptureID" />
+            <p><input type="submit" name="buttonDelete" value="Delete Scripture" /></p>
+        </fieldset>
+    </form>
+</body>
+</html>

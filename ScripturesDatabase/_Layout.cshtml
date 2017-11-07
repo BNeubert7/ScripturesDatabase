@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>My Scriptures</title>
+    <link href="~/Styles/Scriptures.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Shadows+Into+Light" rel="stylesheet">
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1>My Scriptures</h1>
+        </div>
+        <div id="main">
+            @RenderBody()
+        </div>
+        <div id="footer">
+            &copy; @DateTime.Now.Year My Scriptures
+        </div>
+    </div>
+</body>
+</html>
